@@ -1,20 +1,20 @@
 import cmath
+import numpy
+from matplotlib.colors import ListedColormap
 # Pour changer le paramètre c_x,c_y d'une image fractale, il y a trois fonctions :
 """	def SetParam_Complex(self,z):
 	def SetParam_XY(self,x,y):
 	def SetParam_tuple(self,tup):
 """
 # Pour changer les couleurs, c'est à peu près la même chose :
-"""	def SetColCV_RGB(self,r,g,b,n):
-	def SetColDV_RGB(self,r,g,b,m):
-	def SetColCV_tuple(self,tup,n):
-	def SetColDV_tuple(self,tup,m):
+"""	def SetCol_RGB(self,r,g,b,n):
+	def SetCol_tuple(self,tup,n):
  
 En notant :
 n=0 => couleur de convergence en 0
 n=1 => couleur de convergence en 1
-m=0 => couleur de divergence en 1
-m=1 => couleur de divergenec en l'infini
+n=2 => couleur de divergence en 1
+n=3 => couleur de divergence en l'infini
  """
 class ImageFractale:
 	def __init__(self,c_x=0,c_y=0,r_cv_0=255, g_cv_0=255, b_cv_0=255, r_cv_1=255, g_cv_1=255, b_cv_1=255,r_dv_1=0, g_dv_1=0, b_dv_1=0,r_dv_inf=0, g_dv_inf=0, b_dv_inf=0):
@@ -37,7 +37,14 @@ class ImageFractale:
 		self.b_dv_inf=b_dv_inf
 
 	def __str__(self):
-		return str(self.GetParam_XY())+';'+str(self.GetColCV(0))+';'+str(self.GetColCV(1))+';'+str(self.GetColDV(0))+';'+str(self.GetColDV(1))+'\n'
+		return str(self.GetParam_XY())+';'+str(self.GetCol(0))+';'+str(self.GetCol(1))+';'+str(self.GetCol(2))+';'+str(self.GetCol(3))+'\n'
+	
+	# Surcharge d'opérateur pour prendre le négatif d'une image : -img
+	# Pas nécessairement optimal pour l'instant, je suppose
+	def __neg__(self):
+		return ImageFractale(self.c_x,self.c_y,255-self.r_cv_0,255-self.g_cv_0,255-self.b_cv_0,255-self.r_cv_1,255-self.g_cv_1,255-self.b_cv_1,255-self.r_dv_1,255-self.g_dv_1,255-self.b_dv_1,255-self.r_dv_inf,255-self.g_dv_inf,255-self.b_dv_inf)
+
+
 	# Pour éviter de se trimballer des constantes
 	def GetNumCol(self):
 		return 4
@@ -48,16 +55,14 @@ class ImageFractale:
 	def GetParam_XY(self):
 		return self.c_x,self.c_y
 
-	def GetColCV(self,n):
+	def GetCol(self,n):
 		if(n==0):
 			return self.r_cv_0, self.g_cv_0, self.b_cv_0
 		elif(n==1):
 			return self.r_cv_1, self.g_cv_1, self.b_cv_1
-
-	def GetColDV(self,n):
-		if(n==0):
+		elif(n==2):
 			return self.r_dv_1, self.g_dv_1, self.b_dv_1
-		elif(n==1):
+		elif(n==3):
 			return self.r_dv_inf, self.g_dv_inf, self.b_dv_inf
 	
 	def SetParam_Complex(self,z):
@@ -74,26 +79,24 @@ class ImageFractale:
 		except ValueError:
 			print("2-tuple expected")
 
-	def SetColCV_RGB(self,r,g,b,n):
-		if(n==0):
+	def SetCol_RGB(self,r,g,b,n):
+		if(n==0): #Couleur de zone convergente totale
 			self.r_cv_0=r
 			self.g_cv_0=g
 			self.b_cv_0=b
-		elif(n==1):
+		elif(n==1): #Couleur de zone convergente frontière
 			self.r_cv_1=r
 			self.g_cv_1=g
 			self.b_cv_1=b
-
-	def SetColDV_RGB(self,r,g,b,n):
-		if(n==0):
+		elif(n==2): #couleur de la zone divergente frontière
 			self.r_dv_1=r
 			self.g_dv_1=g
 			self.b_dv_1=b
-		elif(n==1):
+		elif(n==3): #couleur de la zone divergente infinie
 			self.r_dv_inf=r
 			self.g_dv_inf=g
 			self.b_dv_inf=b
-	def SetColCV_tuple(self,tup,n):
+	def SetCol_tuple(self,tup,n):
 		try:
 			if(n==0):
 				self.r_cv_0=tup[0]
@@ -103,29 +106,43 @@ class ImageFractale:
 				self.r_cv_1=tup[0]
 				self.g_cv_1=tup[1]
 				self.b_cv_1=tup[2]
-		except ValueError:
-			print('3-tuple expected (RGB)')
-
-	def SetColDV_tuple(self,tup,n):
-		try:
-			if(n==0):
+			elif(n==2):
 				self.r_dv_1=tup[0]
 				self.g_dv_1=tup[1]
 				self.b_dv_1=tup[2]
-			elif(n==1):
+			elif(n==3):
 				self.r_dv_inf=tup[0]
 				self.g_dv_inf=tup[1]
 				self.b_dv_inf=tup[2]
 		except ValueError:
-			print('3-tuple expected (RGB)')
+			print('3-tuple expected (RGB-256)')
+
 	# Méthodes
 	def WriteToFile(self,file):
 		with open(file, 'a') as f:
 			f.write('#'+self.__str__())
 		f.close()
 
-#Fonctions/Procédures :
+	# Très mauvais génie logiciel, aïe
+	# Interpolation des quatre couleurs.
+	def InterpolColour(self):
+		c=[(0.0,0.0,0.0,1.0) for i in range(5)]	
+		cpt=0
+		while(cpt<4):
+			c[cpt]=RGB2RGBA(self.GetCol(cpt))
+			cpt+=1
+		t_couleurs=[c[4] for i in range(256)]
+		
+		for i in range(20,64):
+			t_couleurs[i]=tuple(((1-i/64)*c[4][0]+i/63*c[0][0],(1-i/64)*c[4][1]+i/64*c[0][1],(1-i/64)*c[4][2]+i/64*c[0][2],1.0))
+		cpt=1
+		while(cpt<4):
+			for i in range(64):
+				t_couleurs[i + 64*cpt]=tuple(((1-i/64)*c[cpt-1][0]+i/64*c[cpt][0],(1-i/64)*c[cpt-1][1]+i/64*c[cpt][1],(1-i/64)*c[cpt-1][2]+i/64*c[cpt][2],1.0))
+			cpt+=1
+		return ListedColormap(t_couleurs)
 
+#Fonctions/Procédures :
 #Créer une ImageFractale à partir du n-ème génome du fichier
 def NewFromFile(file,n=1):
 	i=0
@@ -139,9 +156,13 @@ def NewFromFile(file,n=1):
 	img=ImageFractale()
 	print(eval(tab[0]))
 	img.SetParam_tuple(eval(tab[0]))
-	img.SetColCV_tuple(eval(tab[1]),0)
-	img.SetColCV_tuple(eval(tab[2]),1)
-	img.SetColDV_tuple(eval(tab[3]),0)
-	img.SetColDV_tuple(eval(tab[4]),1)
+	img.SetCol_tuple(eval(tab[1]),0)
+	img.SetCol_tuple(eval(tab[2]),1)
+	img.SetCol_tuple(eval(tab[3]),2)
+	img.SetCol_tuple(eval(tab[4]),3)
 	f.close()
 	return img
+
+#Le format pour matplotlib
+def RGB2RGBA(rgb_tuple):
+	return rgb_tuple[0]/256,rgb_tuple[1]/256,rgb_tuple[2]/256,1
