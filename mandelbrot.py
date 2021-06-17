@@ -27,7 +27,7 @@ def mandelbrot_set(xmin, xmax, ymin, ymax, xn, yn, maxiter, horizon=2.0):
     N[N == maxiter-1] = 0
     return Z, N
 
-
+"""
 if __name__ == '__main__':
     import time
     import matplotlib
@@ -75,3 +75,4 @@ if __name__ == '__main__':
     ax.set_yticks([])
 
     plt.show()
+    """

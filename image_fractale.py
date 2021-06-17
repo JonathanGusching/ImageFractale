@@ -17,7 +17,8 @@ n=2 => couleur de divergence en 1
 n=3 => couleur de divergence en l'infini
  """
 class ImageFractale:
-	def __init__(self,c_x=0,c_y=0,r_cv_0=255, g_cv_0=255, b_cv_0=255, r_cv_1=255, g_cv_1=255, b_cv_1=255,r_dv_1=0, g_dv_1=0, b_dv_1=0,r_dv_inf=0, g_dv_inf=0, b_dv_inf=0):
+	""" Exemple de fractale pas trop moche """
+	def __init__(self,c_x=0.285,c_y=0.01,r_cv_0=200, g_cv_0=155, b_cv_0=155, r_cv_1=55, g_cv_1=190, b_cv_1=155,r_dv_1=50, g_dv_1=100, b_dv_1=0,r_dv_inf=0, g_dv_inf=100, b_dv_inf=50):
 		self.c_x=c_x
 		self.c_y=c_y
 		self.r_cv_0=r_cv_0
@@ -133,7 +134,7 @@ class ImageFractale:
 			cpt+=1
 		t_couleurs=[c[4] for i in range(256)]
 		
-		for i in range(20,64):
+		for i in range(10,64):
 			t_couleurs[i]=tuple(((1-i/64)*c[4][0]+i/63*c[0][0],(1-i/64)*c[4][1]+i/64*c[0][1],(1-i/64)*c[4][2]+i/64*c[0][2],1.0))
 		cpt=1
 		while(cpt<4):

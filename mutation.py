@@ -53,9 +53,9 @@ def RandomMutation(img,lam_normale,lam_poisson, p_mutation, nb_bits=1):
 		MutationCol(img,lam_poisson)
 		MutationParameter(img,lam_normale)
 
-
-""" Quelques tests : """
+"""
+ Quelques tests :
 img=fract.ImageFractale(1,2)
 print(img.__str__())
 img=-img
-img.InterpolColour()
+img.InterpolColour()"""
