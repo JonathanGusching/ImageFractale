@@ -167,3 +167,27 @@ def NewFromFile(file,n=1):
 #Le format pour matplotlib
 def RGB2RGBA(rgb_tuple):
 	return rgb_tuple[0]/256,rgb_tuple[1]/256,rgb_tuple[2]/256,1
+
+def ImageAleatoire():
+	import numpy.random as rd
+	rd.seed()
+	c_x,c_y=rd.uniform(-2,2,[2,1])
+	
+	r_cv_0=rd.randint(256)
+	g_cv_0=rd.randint(256)
+	b_cv_0=rd.randint(256)
+
+	r_cv_1=rd.randint(256)
+	g_cv_1=rd.randint(256)
+	b_cv_1=rd.randint(256)
+
+	r_dv_1=rd.randint(256)
+	g_dv_1=rd.randint(256)
+	b_dv_1=rd.randint(256)
+
+	r_dv_inf=rd.randint(256)
+	g_dv_inf=rd.randint(256)
+	b_dv_inf=rd.randint(256)
+
+	return ImageFractale(c_x,c_y,r_cv_0,g_cv_0,b_cv_0,r_cv_1,g_cv_1,b_cv_1,r_dv_1,g_dv_1,b_dv_1,r_dv_inf,g_dv_inf,b_dv_inf)
+
