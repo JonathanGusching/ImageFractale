@@ -21,6 +21,7 @@ class GroupeImage:
 		print("ok")
 
 	def Mutation(self):
+		rd.seed()
 		for i in range(NB_FRACT):
 			mut.RandomMutation(self.img_fract_t[i],0.01,70,P_MUT,1)
 

@@ -27,24 +27,34 @@ def MutationParameter(img,lam):
 
 
 #à utiliser si besoin:
-invert={"0":"1","1":"0"}
+#invert={"0":"1","1":"0"}
+def invert(n):
+	out=0
+	if(n==0):
+		out=1
+	return out
+
 # Choisit aléatoirement au plus n bits à modifier uniformément / 8 bits * 3 = 24 bits
-def BitWiseMutation(r,g,b,n):
-	#r,g,b=
+def BitWiseMutation(img,n):
+	nb=rd.randint(4)
+	r,g,b=img.GetCol(nb)
 	r_b=format(r,"08b") # 8 bits chacun
 	g_b=format(g,"08b")	
 	b_b=format(b,"08b")
 	dna = r_b+g_b+b_b # 24 bits
+	new_dna=dna
 	i=0
 	#Faire les opérations ici :
 	while(i<n):
 		index=rd.randint(24)
-		dna[index]=invert[dna[index]] #Inversion : 0 devient 1 et 1 devient 0
+		new_dna=dna[0:index-1]+str(invert(dna[index]))+dna[index+1:24] #Inversion : 0 devient 1 et 1 devient 0
 		i+=1
+	print(new_dna)
 	#On remet tout dans r,g,b:
-	r=int(dna[0:7],2)
-	g=int(dna[8:15],2)
-	b=int(dna[16:23],2)
+	r=int(new_dna[0:7],2)
+	g=int(new_dna[8:15],2)
+	b=int(new_dna[16:23],2)
+	img.SetCol_RGB(r,g,b,n)
 
 # Fonction qui regroupe ce qu'il faut pour faire muter l'image
 def RandomMutation(img,lam_normale,lam_poisson, p_mutation, nb_bits=1):
@@ -54,8 +64,7 @@ def RandomMutation(img,lam_normale,lam_poisson, p_mutation, nb_bits=1):
 		MutationCol(img,lam_poisson)
 		MutationParameter(img,lam_normale)
 	if(p_mutation>rand_float*3):
-		MutationCol(img,lam_poisson)
-		MutationParameter(img,lam_normale)
+		BitWiseMutation(img,nb_bits)
 """
  Quelques tests :
 img=fract.ImageFractale(1,2)
