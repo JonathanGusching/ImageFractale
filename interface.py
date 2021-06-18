@@ -12,6 +12,12 @@ ACTIVATED_BUTTON_COLOUR = '#9C9C9C'
 IMAGE_WIDTH = 300
 IMAGE_HEIGHT = 300
 
+# taille des images pour le rendu final
+IMAGE_WIDTH_FINAL = 700
+IMAGE_HEIGHT_FINAL = 700
+
+# police d'ecriture
+FONT = "Comic Sans MS"
 
 
 # affiche le bouton associé après clic et le maintient enfoncé en réinitialisant ceux dans le même groupement
@@ -25,14 +31,47 @@ def res_button(button_position):
 
 
 # renvoie les notes si elles ont toutes été données et que l'on a appuyé sur le bouton de validation
-def valider():
-	pass
+def refresh_page():
+	for i in range(2):
+		for j in range(4):
+			# reset des images
+			images[i][j] = PhotoImage(file='fractale_'+str(i)+'_'+str(j)+'.png')
+			canvas[i][j].create_image(IMAGE_WIDTH//2, IMAGE_HEIGHT//2, image=images[i][j])
+			# reset de la couleur des boutons
+			for k in range(6):
+				buttons[i][j][k].config(bg=BUTTON_COLOUR)
+				
+	window.mainloop()
+
 
 
 # efface tout et affiche la meilleure fractale finale
+def fin():
+
+	# suppression des deux cadres 
+	centralframe.destroy()
+	frame_validation_stop.destroy()
+
+	# genere la nouvelle fenetre (image taille reelle + bouton d'arret definitif)
+	frame_image_finale = Frame(window, bg=BG_COLOUR)
+	image_finale = PhotoImage(file='best_fractale.png')
+	canvas_image_finale = Canvas(frame_image_finale, bg=BG_COLOUR, width=IMAGE_WIDTH_FINAL, height=IMAGE_HEIGHT_FINAL)
+	canvas_image_finale.create_image(IMAGE_WIDTH_FINAL//2, IMAGE_HEIGHT_FINAL//2, image=image_finale)
+	canvas_image_finale.pack()
+
+	frame_button = Frame(window, bg=BG_COLOUR)
+	quit_button = Button(frame_button, text='Quitter', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=arreter)
+	quit_button.pack()
+
+	frame_image_finale.pack(expand=YES)
+	frame_button.pack(expand=YES)
+	window.mainloop()
+
+
+
+# arrete definitivement (accessible dans la fenetre d'affichage finale)
 def arreter():
 	window.destroy()
-
 
 	
 
@@ -62,9 +101,9 @@ for i in range(4):
 
 
 # boutons validation finale et arrêt
-validation_button = Button(frame_validation_stop, text='Valider', font=("Arial", 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=valider)
+validation_button = Button(frame_validation_stop, text='Valider', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=refresh_page)
 validation_button.grid(row=0, column=1, padx=50)
-stop_button = Button(frame_validation_stop, text='Arrêter', font=("Arial", 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=arreter)
+stop_button = Button(frame_validation_stop, text='Arrêter', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=fin)
 stop_button.grid(row=0, column=0, padx=50)
 
 # boutons de notation
@@ -77,7 +116,7 @@ for i in [1,3]:
 		i_liste = (i-1)//2
 		buttons[i_liste].append([])
 		for k in range(6):
-			buttons[i_liste][j].append(Button(frames[i][j], text=str(k), font=("Arial", 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, activebackground=ACTIVATED_BUTTON_COLOUR, command=partial(res_button, [i_liste,j,k])))
+			buttons[i_liste][j].append(Button(frames[i][j], text=str(k), font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, activebackground=ACTIVATED_BUTTON_COLOUR, command=partial(res_button, [i_liste,j,k])))
 
 
 
