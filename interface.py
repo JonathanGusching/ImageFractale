@@ -31,7 +31,7 @@ def valider():
 
 # efface tout et affiche la meilleure fractale finale
 def arreter():
-	pass
+	window.destroy()
 
 
 	

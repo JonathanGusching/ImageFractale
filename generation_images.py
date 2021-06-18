@@ -25,6 +25,9 @@ class GroupeImage:
 		for i in range(NB_FRACT):
 			mut.RandomMutation(self.img_fract_t[i],0.01,70,P_MUT,1)
 
+	def NouvelleGeneration():
+		print("test")
+		
 	def EnregistrerImages(self, nom):
 		for i in range(NB_FRACT):
 			fichier=nom+'_'+str(i//(NB_FRACT//2))+'_'+str(i%(NB_FRACT//2))

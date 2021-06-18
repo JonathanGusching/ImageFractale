@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from julia import julia_set
 
-def creer_julia(img,nom,xmin=-1.5,xmax=1.5,xn=375,ymin=-1.5,ymax=1.5,yn=375,maxiter=200, horizon=1099511627776.0,dpi=30,width=10,height=10):
+def creer_julia(img,nom,xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300, horizon=1099511627776.0,dpi=30,width=10,height=10):
 	"""
 	xmin, xmax, xn = -1.25, +1.25, 3000//8
 	ymin, ymax, yn = -1.25, +1.25, 3000//8
@@ -16,10 +16,17 @@ def creer_julia(img,nom,xmin=-1.5,xmax=1.5,xn=375,ymin=-1.5,ymax=1.5,yn=375,maxi
 	"""
 	log_horizon = np.log(np.log(horizon))/np.log(2)
 	cmap=(img).InterpolColour()
-	c_x, c_y=img.GetParam_XY()
-
+	c_x, c_y=img.GetParam_XY(0)
+	c1_x, c1_y=img.GetParam_XY(1)
+	c2_x, c2_y=img.GetParam_XY(2)
+	c3_x, c3_y=img.GetParam_XY(3)
+	if(c3_x==0 and c3_y==0):
+		xmin=-2
+		xmax=2
+		ymin=-2
+		ymax=2
 	""" Ce qui prend le plus de temps de calcul """
-	Z, N = julia_set(xmin, xmax, ymin, ymax, xn, yn, c_x, c_y, maxiter, horizon)
+	Z, N = julia_set(xmin, xmax, ymin, ymax, xn, yn, c3_x, c3_y,c2_x, c2_y,c1_x, c1_y,c_x, c_y, maxiter, horizon)
     
     # Normalized recount as explained in:
     # https://linas.org/art-gallery/escape/smooth.html

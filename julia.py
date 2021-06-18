@@ -13,15 +13,19 @@ take a few seconds on most modern laptops.
 import numpy as np
 import image_fractale as fract
 import mutation as mt
-def julia_set(xmin, xmax, ymin, ymax, xn, yn, cx, cy, maxiter, horizon=2.0):
+def julia_set(xmin, xmax, ymin, ymax, xn, yn, c3x, c3y,c2x, c2y,c1x, c1y,cx, cy, maxiter, horizon=2.0):
     X = np.linspace(xmin, xmax, xn).astype(np.float32)
     Y = np.linspace(ymin, ymax, yn).astype(np.float32)
     Z = X + Y[:, None] * 1j
     N = np.zeros_like(Z, dtype=int)
-    C = complex(cx, cy) 
+    C = complex(cx, cy)
+    C1 = complex(c1x, c1y)
+    C2 = complex(c2x, c2y)
+    C3 = complex(c3x, c3y) 
+
     for n in range(maxiter):
         I = np.less(abs(Z), horizon)
         N[I] = n
-        Z[I] = Z[I]**2 + C
+        Z[I] = C3*Z[I]**3 +C2*Z[I]**2 + C1*Z[I] + C
     N[N == maxiter-1] = 0
     return Z, N
