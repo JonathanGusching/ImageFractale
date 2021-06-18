@@ -30,6 +30,7 @@ def MutationParameter(img,lam):
 invert={"0":"1","1":"0"}
 # Choisit aléatoirement au plus n bits à modifier uniformément / 8 bits * 3 = 24 bits
 def BitWiseMutation(r,g,b,n):
+	#r,g,b=
 	r_b=format(r,"08b") # 8 bits chacun
 	g_b=format(g,"08b")	
 	b_b=format(b,"08b")
@@ -50,10 +51,11 @@ def RandomMutation(img,lam_normale,lam_poisson, p_mutation, nb_bits=1):
 	rd.seed()
 	rand_float=rd.random()
 	if(p_mutation>rand_float):
-		rand_float=rd.random()
 		MutationCol(img,lam_poisson)
 		MutationParameter(img,lam_normale)
-
+	if(p_mutation>rand_float*3):
+		MutationCol(img,lam_poisson)
+		MutationParameter(img,lam_normale)
 """
  Quelques tests :
 img=fract.ImageFractale(1,2)

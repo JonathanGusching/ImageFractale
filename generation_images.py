@@ -1,7 +1,10 @@
 import image_fractale as fract
 import mutation as mut
 import creat_image as c_i
+import numpy.random as rd
+
 NB_FRACT=8
+P_MUT=0.10
 
 """Classe qui contient NB_FRACT ImageFractale sous forme d'un tableau """
 class GroupeImage:
@@ -15,11 +18,11 @@ class GroupeImage:
 		except:
 			print("Wrong index")
 	def Crossover(self):
-		print("Fonction à remplir")
-		""" COMPLETER """
+		print("ok")
 
 	def Mutation(self):
-		print("completer")
+		for i in range(NB_FRACT):
+			mut.RandomMutation(self.img_fract_t[i],0.01,70,P_MUT,1)
 
 	def EnregistrerImages(self, nom):
 		for i in range(NB_FRACT):
