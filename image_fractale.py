@@ -16,6 +16,8 @@ n=1 => couleur de convergence en 1
 n=2 => couleur de divergence en 1
 n=3 => couleur de divergence en l'infini
  """
+
+"""étude diversité, op de sélection"""
 class ImageFractale:
 	""" Exemple de fractale pas trop moche """
 	def __init__(self,c_x=0.285,c_y=0.01,r_cv_0=200, g_cv_0=155, b_cv_0=155, r_cv_1=55, g_cv_1=190, b_cv_1=155,r_dv_1=50, g_dv_1=100, b_dv_1=0,r_dv_inf=0, g_dv_inf=100, b_dv_inf=50):

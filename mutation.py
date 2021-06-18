@@ -2,16 +2,17 @@ import image_fractale as fract
 import numpy.random as rd
 
 #Utilise une loi de Poisson pour modifier les couleurs
+#Mutation trop faible?
 def PoissonRGB(img,lam,n):
 	rd.seed()
 	nbCol=rd.randint(3)
 	r,g,b=img.GetCol(n)
 	if(nbCol==0):
-		r=(r+rd.poisson(lam,1))%256
+		r=(r+rd.poisson(lam))%256
 	if(nbCol==1):
-		g=(g+rd.poisson(lam,1))%256
+		g=(g+rd.poisson(lam))%256
 	if(nbCol==2):
-		g=(g+rd.poisson(lam,1))%256	
+		g=(g+rd.poisson(lam))%256	
 	img.SetCol_RGB(r,g,b,n)
 
 

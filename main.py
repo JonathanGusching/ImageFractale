@@ -11,10 +11,11 @@ if __name__=='__main__':
 	fractales=[fract.ImageAleatoire() for i in range(8)]
 
 	print(fractales[1])
-	mutation.MutationCol(fractales[1],1)
+	mutation.MutationCol(fractales[1],256)
 	print(fractales[1])
 	fractales[1]= fractales[0].Copy()
-	mutation.MutationCol(fractales[1],0.5)
+	mutation.MutationCol(fractales[1],256)
+	fractales[2]=fractales[1].Copy()
 	fractales_t=g_i.GroupeImage(fractales)
 
 	fractales_t.EnregistrerImages('fractale')

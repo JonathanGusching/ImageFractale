@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from julia import julia_set
 
-def creer_julia(img,nom,xmin=-1.25,xmax=1.25,xn=375,ymin=-1.25,ymax=1.25,yn=375,maxiter=200, horizon=1099511627776.0,dpi=30,width=10,height=10):
+def creer_julia(img,nom,xmin=-1.5,xmax=1.5,xn=375,ymin=-1.5,ymax=1.5,yn=375,maxiter=200, horizon=1099511627776.0,dpi=30,width=10,height=10):
 	"""
 	xmin, xmax, xn = -1.25, +1.25, 3000//8
 	ymin, ymax, yn = -1.25, +1.25, 3000//8
