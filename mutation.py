@@ -7,11 +7,11 @@ def PoissonRGB(img,lam,n):
 	nbCol=rd.randint(3)
 	r,g,b=img.GetCol(n)
 	if(nbCol==0):
-		r=(r+rd.poisson(lam)-lam)%256
+		r=(r+rd.poisson(lam,1))%256
 	if(nbCol==1):
-		g=(g+rd.poisson(lam)-lam)%256
+		g=(g+rd.poisson(lam,1))%256
 	if(nbCol==2):
-		g=(g+rd.poisson(lam)-lam)%256	
+		g=(g+rd.poisson(lam,1))%256	
 	img.SetCol_RGB(r,g,b,n)
 
 

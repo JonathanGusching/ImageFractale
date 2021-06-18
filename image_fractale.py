@@ -45,6 +45,8 @@ class ImageFractale:
 	def __neg__(self):
 		return ImageFractale(self.c_x,self.c_y,255-self.r_cv_0,255-self.g_cv_0,255-self.b_cv_0,255-self.r_cv_1,255-self.g_cv_1,255-self.b_cv_1,255-self.r_dv_1,255-self.g_dv_1,255-self.b_dv_1,255-self.r_dv_inf,255-self.g_dv_inf,255-self.b_dv_inf)
 
+	def Copy(self):
+		return ImageFractale(self.c_x,self.c_y,self.r_cv_0,self.g_cv_0,self.b_cv_0,self.r_cv_1,self.g_cv_1,self.b_cv_1,self.r_dv_1,self.g_dv_1,self.b_dv_1,self.r_dv_inf,self.g_dv_inf,self.b_dv_inf)
 
 	# Pour éviter de se trimballer des constantes
 	def GetNumCol(self):
