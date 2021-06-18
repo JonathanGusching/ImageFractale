@@ -16,14 +16,5 @@ if __name__=='__main__':
 	fractales_t=g_i.GroupeImage(fractales)
 	#fractales_t.Mutation()
 	fractales_t.EnregistrerImages('fractale')
+	creer_julia(fractales[0],"test",xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300, horizon=1099511627776.0,dpi=70,width=10,height=10)
 	import interface
-	"""
-	for i in range(8):
-		p = multiprocessing.Process(target=creer_julia,args=(fractales[i],))
-		#p=multiprocessing.Process(target=id)
-		processes.append(p)
-		p.start()
-	
-	for process in processes:
-		process.join()
-	"""

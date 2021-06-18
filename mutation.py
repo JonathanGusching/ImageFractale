@@ -22,8 +22,10 @@ def MutationCol(img,lam):
 	PoissonRGB(img,lam,col)
 # Modifie le paramètre c selon une gaussienne
 def MutationParameter(img,lam):
-	c_x,c_y=img.GetParam_XY()
-	img.SetParam_XY(c_x+rd.normal(),c_y+rd.normal())	
+	rd.seed()
+	n=rd.randint(4)
+	c_x,c_y=img.GetParam_XY(n)
+	img.SetParam_XY(c_x+rd.normal(),c_y+rd.normal(),n)	
 
 
 #à utiliser si besoin:
