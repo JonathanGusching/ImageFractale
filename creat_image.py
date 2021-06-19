@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from julia import julia_set
 
-def creer_julia(img,nom,xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300, horizon=1099511627776.0,dpi=30,width=10,height=10):
+def creer_julia(img,nom,xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=500, horizon=1099511627776.0,dpi=30,width=10,height=10):
 	"""
 	xmin, xmax, xn = -1.25, +1.25, 3000//8
 	ymin, ymax, yn = -1.25, +1.25, 3000//8
@@ -25,6 +25,9 @@ def creer_julia(img,nom,xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300,
 		xmax=2
 		ymin=-2
 		ymax=2
+
+	ymin=ymin*height/width
+	ymax=ymax*height/width
 	""" Ce qui prend le plus de temps de calcul """
 	Z, N = julia_set(xmin, xmax, ymin, ymax, xn, yn, c3_x, c3_y,c2_x, c2_y,c1_x, c1_y,c_x, c_y, maxiter, horizon)
     

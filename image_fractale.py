@@ -106,10 +106,20 @@ class ImageFractale:
 			self.c3_x=x
 			self.c3_y=y
 
-	def SetParam_tuple(self,tup):
+	def SetParam_tuple(self,tup,n=0):
 		try:
-			self.c_x=tup[0]
-			self.c_y=tup[1]
+			if(n==0):
+				self.c_x=tup[0]
+				self.c_y=tup[1]
+			if(n==1):
+				self.c1_x=tup[0]
+				self.c1_y=tup[1]
+			if(n==2):
+				self.c2_x=tup[0]
+				self.c2_y=tup[1]
+			if(n==3):
+				self.c3_x=tup[0]
+				self.c3_y=tup[1]
 		except ValueError:
 			print("2-tuple expected")
 
@@ -189,11 +199,14 @@ def NewFromFile(file,n=1):
 	tab=buff[1:].split(';') #On exclut le premier caractère de détection
 	img=ImageFractale()
 	print(eval(tab[0]))
-	img.SetParam_tuple(eval(tab[0]))
-	img.SetCol_tuple(eval(tab[1]),0)
-	img.SetCol_tuple(eval(tab[2]),1)
-	img.SetCol_tuple(eval(tab[3]),2)
-	img.SetCol_tuple(eval(tab[4]),3)
+	img.SetParam_tuple(eval(tab[0]),3)
+	img.SetParam_tuple(eval(tab[1]),2)
+	img.SetParam_tuple(eval(tab[2]),1)
+	img.SetParam_tuple(eval(tab[3]),0)
+	img.SetCol_tuple(eval(tab[4]),0)
+	img.SetCol_tuple(eval(tab[5]),1)
+	img.SetCol_tuple(eval(tab[6]),2)
+	img.SetCol_tuple(eval(tab[7]),3)
 	f.close()
 	return img
 
