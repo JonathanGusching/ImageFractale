@@ -20,14 +20,23 @@ IMAGE_HEIGHT_FINAL = 700
 FONT = "Comic Sans MS"
 
 
-# affiche le bouton associé après clic et le maintient enfoncé en réinitialisant ceux dans le même groupement
+# met à jour la note correspondant à la fractale dans le fichier notes.txt
 def res_button(button_position):
 	for k in range(6):
-		# remise à la couleur d'origine des autres boutons du groupement
+		# remise à la couleur d'origine des autres boutons du groupement (en cas de changement d'avis)
 		buttons[button_position[0]][button_position[1]][k].config(bg=BUTTON_COLOUR)
 	buttons[button_position[0]][button_position[1]][button_position[2]].config(bg=ACTIVATED_BUTTON_COLOUR)
 
-	return(button_position)
+	# écriture de la note dans le fichier (en lignes)
+	fichierNotes = open('notes.txt', 'r')
+	lignes = fichierNotes.readlines()
+	# modification de la ligne correspondant à la note changée
+	lignes[4*button_position[0] + button_position[1]] = str(button_position[2]) + '\n'
+	fichierNotes.close()
+	fichierNotes = open('notes.txt', 'w')
+	fichierNotes.writelines(lignes)
+	fichierNotes.close()
+
 
 
 # renvoie les notes si elles ont toutes été données et que l'on a appuyé sur le bouton de validation
