@@ -57,7 +57,8 @@ def refresh_page():
 # efface tout et affiche la meilleure fractale finale
 # En argument : GroupeImage
 def fin(fractales_t):
-	g_i.EnregistrerMeilleure(fractales_t)
+	fractales_t.SetNoteFromFile()
+	fractales_t.EnregistrerMeilleure()
 	# suppression des deux cadres 
 	centralframe.destroy()
 	frame_validation_stop.destroy()
