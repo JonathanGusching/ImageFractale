@@ -26,6 +26,9 @@ def julia_set(xmin, xmax, ymin, ymax, xn, yn, c3x, c3y,c2x, c2y,c1x, c1y,cx, cy,
     for n in range(maxiter):
         I = np.less(abs(Z), horizon)
         N[I] = n
-        Z[I] = C3*Z[I]**3 +C2*Z[I]**2 + C1*Z[I] + C
+        # ancienne version, sans Hörner
+        # Z[I] = C3*Z[I]**3 +C2*Z[I]**2 + C1*Z[I] + C
+        # Hörner ordre 3, pour éviter les puissances :
+        Z[I] = C+ Z[I]*(C1 + Z[I]*(C2 + Z[I]*C3))
     N[N == maxiter-1] = 0
     return Z, N
