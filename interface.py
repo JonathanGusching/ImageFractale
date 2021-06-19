@@ -55,8 +55,9 @@ def refresh_page():
 
 
 # efface tout et affiche la meilleure fractale finale
-def fin():
-
+# En argument : GroupeImage
+def fin(fractales_t):
+	g_i.EnregistrerMeilleure(fractales_t)
 	# suppression des deux cadres 
 	centralframe.destroy()
 	frame_validation_stop.destroy()
@@ -81,6 +82,32 @@ def fin():
 # arrete definitivement (accessible dans la fenetre d'affichage finale)
 def arreter():
 	window.destroy()
+
+
+#	I
+#	I
+#	I
+#	V
+
+""" IMPORTATION DU MAIN """
+import generation_images as g_i
+import julia
+import mutation
+import image_fractale as fract
+import time
+from creat_image import creer_julia
+
+fractales=[fract.ImageAleatoire() for i in range(8)]
+
+fractales[1]= fractales[0].Copy()
+#mutation.RandomMutation(fractales[1],0.02,70,0.8 , nb_bits=1)
+mutation.BitWiseMutation(fractales[1],1)
+fractales_t=g_i.GroupeImage(fractales)
+#fractales_t.Mutation()
+fractales_t.EnregistrerImages('fractale')
+creer_julia(fractales[0],"test",xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300, horizon=1099511627776.0,dpi=70,width=10,height=10)
+
+
 
 	
 
@@ -112,7 +139,7 @@ for i in range(4):
 # boutons validation finale et arrêt
 validation_button = Button(frame_validation_stop, text='Valider', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=refresh_page)
 validation_button.grid(row=0, column=1, padx=50)
-stop_button = Button(frame_validation_stop, text='Arrêter', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=fin)
+stop_button = Button(frame_validation_stop, text='Arrêter', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=partial(fin,fractales_t))
 stop_button.grid(row=0, column=0, padx=50)
 
 # boutons de notation
@@ -126,7 +153,6 @@ for i in [1,3]:
 		buttons[i_liste].append([])
 		for k in range(6):
 			buttons[i_liste][j].append(Button(frames[i][j], text=str(k), font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, activebackground=ACTIVATED_BUTTON_COLOUR, command=partial(res_button, [i_liste,j,k])))
-
 
 
 # images 
