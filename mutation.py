@@ -1,6 +1,8 @@
 import image_fractale as fract
 import numpy.random as rd
 
+PROBA_CHANGT_ESPECE=0.05
+
 #Utilise une loi de Poisson pour modifier les couleurs
 #Mutation trop faible?
 def PoissonRGB(img,lam,n):
@@ -20,13 +22,19 @@ def PoissonRGB(img,lam,n):
 def MutationCol(img,lam):
 	col=rd.randint(4)
 	PoissonRGB(img,lam,col)
+
 # Modifie le paramètre c selon une gaussienne
 def MutationParameter(img,lam):
 	rd.seed()
 	n=rd.randint(4)
 	c_x,c_y=img.GetParam_XY(n)
-	img.SetParam_XY(c_x+rd.normal(),c_y+rd.normal(),n)	
 
+	#Pas de changement d'espèce?
+	if(c_x!=0 or c_y!=0):
+		img.SetParam_XY(c_x+rd.normal(lam),c_y+rd.normal(lam),n)
+	else:
+		if(rd.rand()<=PROBA_CHANGT_ESPECE):
+			img.SetParam_XY(c_x+rd.normal(lam),c_y+rd.normal(lam),n)
 
 #à utiliser si besoin:
 #invert={"0":"1","1":"0"}
@@ -65,7 +73,7 @@ def RandomMutation(img,lam_normale,lam_poisson, p_mutation, nb_bits=1):
 	if(p_mutation>rand_float):
 		MutationCol(img,lam_poisson)
 		MutationParameter(img,lam_normale)
-	if(p_mutation>rand_float*3):
+	if(p_mutation>rand_float*4):
 		BitWiseMutation(img,nb_bits)
 """
  Quelques tests :

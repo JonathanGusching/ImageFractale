@@ -40,7 +40,8 @@ def res_button(button_position):
 
 
 # renvoie les notes si elles ont toutes été données et que l'on a appuyé sur le bouton de validation
-def refresh_page():
+def refresh_page(fractales_t):
+	fractales_t.NouvelleGeneration()
 	for i in range(2):
 		for j in range(4):
 			# reset des images
@@ -49,7 +50,6 @@ def refresh_page():
 			# reset de la couleur des boutons
 			for k in range(6):
 				buttons[i][j][k].config(bg=BUTTON_COLOUR)
-				
 	window.mainloop()
 
 
@@ -100,13 +100,10 @@ from creat_image import creer_julia
 
 fractales=[fract.ImageAleatoire() for i in range(8)]
 
-fractales[1]= fractales[0].Copy()
 #mutation.RandomMutation(fractales[1],0.02,70,0.8 , nb_bits=1)
-mutation.BitWiseMutation(fractales[1],1)
 fractales_t=g_i.GroupeImage(fractales)
 #fractales_t.Mutation()
 fractales_t.EnregistrerImages('fractale')
-creer_julia(fractales[0],"test",xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=300, horizon=1099511627776.0,dpi=70,width=10,height=10)
 
 
 
@@ -138,7 +135,7 @@ for i in range(4):
 
 
 # boutons validation finale et arrêt
-validation_button = Button(frame_validation_stop, text='Valider', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=refresh_page)
+validation_button = Button(frame_validation_stop, text='Valider', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=partial(refresh_page,fractales_t))
 validation_button.grid(row=0, column=1, padx=50)
 stop_button = Button(frame_validation_stop, text='Arrêter', font=(FONT, 30), bg=BUTTON_COLOUR, fg=TEXT_COLOUR, command=partial(fin,fractales_t))
 stop_button.grid(row=0, column=0, padx=50)

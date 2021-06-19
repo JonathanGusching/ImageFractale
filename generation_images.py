@@ -5,7 +5,7 @@ import numpy as np
 
 #Variables globales
 NB_FRACT=8
-P_MUT=0.10
+P_MUT=1.00
 F_NOTES="notes.txt"
 N_BEST="best_fractale.png"
 N_BEST_TXT="best_fractale.txt"
@@ -66,7 +66,7 @@ class GroupeImage:
 					i+=1
 
 	def Copy(self):
-		return GroupeImage(self.GetImageFractale(),self.GetImageNote())
+		return GroupeImage(self.GetImageFractale(),self.GetNote())
 
 	def Crossover(self):
 		print("ok")
@@ -81,7 +81,9 @@ class GroupeImage:
 		new_gen=self.Copy()
 		new_gen.Crossover()
 		new_gen.Mutation()
-		return new_gen
+		self=new_gen
+		self.EnregistrerImages("fractale")
+		
 	
 	#ATTENTION: Pour l'instant, ne s'occupe pas de vérifier les doublons.
 	def AjoutMeilleureAuFichier(nom=N_BEST_TXT):

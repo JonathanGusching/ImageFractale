@@ -57,6 +57,7 @@ def creer_julia(img,nom,xmin=-3,xmax=3,xn=375,ymin=-3,ymax=3,yn=375,maxiter=500,
 	ax.set_xticks([])
 	ax.set_yticks([])
 	plt.savefig(nom)
+	plt.close()
 	#plt.show()
 
 """
