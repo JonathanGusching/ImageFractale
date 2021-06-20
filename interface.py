@@ -41,6 +41,11 @@ def res_button(button_position):
 
 # renvoie les notes si elles ont toutes été données et que l'on a appuyé sur le bouton de validation
 def refresh_page(fractales_t):
+	fractales_t.SetNoteFromFile()
+	#Un peu lent
+	fractales_t.EnregistrerMeilleure(wallpaper=False)
+	fractales_t.AjoutMeilleureAuFichier()
+	
 	fractales_t.NouvelleGeneration()
 	for i in range(2):
 		for j in range(4):
@@ -57,8 +62,6 @@ def refresh_page(fractales_t):
 # efface tout et affiche la meilleure fractale finale
 # En argument : GroupeImage
 def fin(fractales_t):
-	fractales_t.SetNoteFromFile()
-	fractales_t.EnregistrerMeilleure()
 	# suppression des deux cadres 
 	centralframe.destroy()
 	frame_validation_stop.destroy()

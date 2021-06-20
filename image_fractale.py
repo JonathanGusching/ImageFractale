@@ -1,6 +1,6 @@
 import cmath
 import numpy
-from matplotlib.colors import ListedColormap
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 # Pour changer le paramètre c_x,c_y d'une image fractale, il y a trois fonctions :
 """	def SetParam_Complex(self,z):
 	def SetParam_XY(self,x,y):
@@ -50,7 +50,7 @@ class ImageFractale:
 		self.b_dv_inf=b_dv_inf
 
 	def __str__(self):
-		return str(self.GetParam_XY(3))+';'+self.GetParam_XY(2)+';'+self.GetParam_XY(1)+';'+self.GetParam_XY(0)+';'+str(self.GetCol(0))+';'+str(self.GetCol(1))+';'+str(self.GetCol(2))+';'+str(self.GetCol(3))+'\n'
+		return str(self.GetParam_XY(3))+';'+str(self.GetParam_XY(2))+';'+str(self.GetParam_XY(1))+';'+str(self.GetParam_XY(0))+';'+str(self.GetCol(0))+';'+str(self.GetCol(1))+';'+str(self.GetCol(2))+';'+str(self.GetCol(3))+'\n'
 	
 	# Surcharge d'opérateur pour prendre le négatif d'une image : -img
 	# Pas nécessairement optimal pour l'instant, je suppose
@@ -169,7 +169,7 @@ class ImageFractale:
 
 	# Très mauvais génie logiciel, aïe
 	# Interpolation des quatre couleurs.
-	def InterpolColour(self):
+	"""	def InterpolColour(self):
 		c=[(0.0,0.0,0.0,1.0) for i in range(5)]	
 		cpt=0
 		while(cpt<4):
@@ -185,6 +185,18 @@ class ImageFractale:
 				t_couleurs[i + 64*cpt]=tuple(((1-i/64)*c[cpt-1][0]+i/64*c[cpt][0],(1-i/64)*c[cpt-1][1]+i/64*c[cpt][1],(1-i/64)*c[cpt-1][2]+i/64*c[cpt][2],1.0))
 			cpt+=1
 		return ListedColormap(t_couleurs)
+	"""
+
+	def InterpolColour(self):
+		colors=[(0.0,0.0,0.0,1.0) for i in range(4)]	
+		cpt=0
+		while(cpt<4):
+			colors[cpt]=RGB2RGBA(self.GetCol(cpt))
+			cpt+=1
+		cmap1 = LinearSegmentedColormap.from_list("mycmap", colors)
+		return cmap1
+
+
 
 #Fonctions/Procédures :
 #Créer une ImageFractale à partir du n-ème génome du fichier

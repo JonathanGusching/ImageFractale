@@ -2,10 +2,11 @@ import image_fractale as fract
 import mutation as mut
 import creat_image as c_i
 import numpy as np
+import operator
 
 #Variables globales
 NB_FRACT=8
-P_MUT=1.00
+P_MUT=0.20
 F_NOTES="notes.txt"
 N_BEST="best_fractale.png"
 N_BEST_TXT="best_fractale.txt"
@@ -16,6 +17,13 @@ INDEX_ERROR="Wrong index, must be between 0 and "+str(NB_FRACT-1)
 #Fonction de probabilité discrète 
 def proba_survie(note):
 	return (note+1)/(MAX_NOTE+2)
+# 6/7
+# 5/7
+# 4/7
+# 3/7
+# 2/7
+# 1/7 = 14.7%
+
 
 """Classe qui contient NB_FRACT ImageFractale sous forme d'un tableau et les notes"""
 class GroupeImage:
@@ -28,22 +36,24 @@ class GroupeImage:
 			try:
 				return self.img_fract_t[n]
 			except:
-				print(INDEX_ERROR)
+				print("GetImageFractale: ", INDEX_ERROR)
 		return self.img_fract_t
 
-	def SetImageFractale(self,n=-1):
-		try:
-			return self.img_fract_t[n]
-		except:
-			print(INDEX_ERROR)
-
-	def GetNote(self,n=-1):
-		try:
-			if(n>=0):
-				return self.img_fract_note_t[n]
-		except:
-			print(INDEX_ERROR)
+	def SetImageFractale(self,img_fract,n=-1):
+		if(n>=0):
+			try:
+				self.img_fract_t[n]=img_fract
+			except:
+				print("SetImageFractale: ",INDEX_ERROR)
 		
+		else:
+			self.img_fract_t=img_fract
+	def GetNote(self,n=-1):
+		if(n>=0):
+			try:
+				return self.img_fract_note_t[n]
+			except:
+				print("GetNote: ", INDEX_ERROR)
 		return self.img_fract_note_t
 
 	"""note=0,n=-1 correspond à un reset """
@@ -52,7 +62,7 @@ class GroupeImage:
 			try:
 				self.img_fract_note_t[n]=note
 			except:
-				print(INDEX_ERROR)
+				print("SetNote: ", INDEX_ERROR)
 		else:
 			self.img_fract_note_t=[0 for i in range(NB_FRACT)]
 
@@ -68,8 +78,37 @@ class GroupeImage:
 	def Copy(self):
 		return GroupeImage(self.GetImageFractale(),self.GetNote())
 
-	def Crossover(self):
-		print("ok")
+	#Sélection et crossover
+	def Crossover(self,proba_note=proba_survie):
+		import random
+		np.random.seed()
+		diviseur=2.0
+		#SELECTION
+		nb_survivants=0
+		new_gen=self.Copy()
+		for i in range(NB_FRACT):
+			temp=np.random.random()
+			#Survit
+			if(temp<=proba_note(self.GetNote(i))):
+				new_gen.SetImageFractale(self.GetImageFractale(i),nb_survivants)
+				nb_survivants+=1
+
+		#CROSSOVER:
+		nb_remplis=nb_survivants #On veut une génération de NB_FRACT individus
+		while(nb_remplis<NB_FRACT):
+			l,j=random.sample(range(nb_survivants),2)
+			fract1=self.GetImageFractale(l)
+			fract2=self.GetImageFractale(j)
+			#Le bébé issu du crossover
+			new_fract=fract1.Copy()
+			#simple moyenne:
+			for k in range(4):
+				addition=tuple(map(operator.add,fract1.GetParam_XY(k),fract2.GetParam_XY(k)))
+				new_fract.SetParam_tuple(tuple(map(lambda x: x/diviseur, addition)),k)
+				#new_fract.SetCol_tuple()
+			new_gen.SetImageFractale(new_fract,nb_remplis)
+			nb_remplis+=1
+		return new_gen
 
 	def Mutation(self):
 		np.random.seed()
@@ -78,21 +117,21 @@ class GroupeImage:
 
 	#Change l'ancienne génération en une nouvelle
 	def NouvelleGeneration(self):
-		new_gen=self.Copy()
-		new_gen.Crossover()
+		new_gen = self.Crossover()
 		new_gen.Mutation()
 		self=new_gen
 		self.EnregistrerImages("fractale")
 		
 	
 	#ATTENTION: Pour l'instant, ne s'occupe pas de vérifier les doublons.
-	def AjoutMeilleureAuFichier(nom=N_BEST_TXT):
+	def AjoutMeilleureAuFichier(self,nom=N_BEST_TXT):
 		i_max=np.argmax(self.GetNote())
 		best_fract=self.GetImageFractale(i_max)
-		#Ajout au fichier texte:
+		"""#Ajout au fichier texte:
 		with open(nom, 'a') as f:
-			f.write('#'+self.__str__())
-		f.close()
+			f.write('#'+self.GetImageFractale(i_max).__str__()+'\n')
+		f.close()"""
+		self.GetImageFractale(i_max).WriteToFile(nom)
 
 	#Enregistre les 8 fractales sous petit format
 	def EnregistrerImages(self, nom):
