@@ -95,7 +95,11 @@ class GroupeImage:
 
 		#CROSSOVER:
 		nb_remplis=nb_survivants #On veut une génération de NB_FRACT individus
-		while(nb_remplis<NB_FRACT):
+		nb_bebes=(NB_FRACT-nb_remplis)//2
+		nb_nouveaux=NB_FRACT-nb_bebes-nb_remplis
+		i_bebes=0
+		i_nouveaux=0
+		while(i_bebes<nb_bebes):
 			l,j=random.sample(range(nb_survivants),2)
 			fract1=self.GetImageFractale(l)
 			fract2=self.GetImageFractale(j)
@@ -106,8 +110,13 @@ class GroupeImage:
 				addition=tuple(map(operator.add,fract1.GetParam_XY(k),fract2.GetParam_XY(k)))
 				new_fract.SetParam_tuple(tuple(map(lambda x: x/diviseur, addition)),k)
 				#new_fract.SetCol_tuple()
-			new_gen.SetImageFractale(new_fract,nb_remplis)
-			nb_remplis+=1
+			new_gen.SetImageFractale(new_fract,nb_remplis+i_bebes)
+			i_bebes+=1
+		while(i_nouveaux<nb_nouveaux):
+			new_fract=fract.ImageAleatoire()
+			new_gen.SetImageFractale(new_fract,nb_remplis+i_bebes+i_nouveaux)
+			i_nouveaux+=1
+
 		return new_gen
 
 	def Mutation(self):

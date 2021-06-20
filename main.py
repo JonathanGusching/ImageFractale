@@ -52,7 +52,7 @@ def res_button(button_position):
 def refresh_page(fractales_t):
 	fractales_t.SetNoteFromFile()
 	#Un peu lent
-	fractales_t.EnregistrerMeilleure(wallpaper=False)
+	fractales_t.EnregistrerMeilleure(wallpaper=True)
 	fractales_t.AjoutMeilleureAuFichier()
 	fractales_t.NouvelleGeneration()
 	calcul_diversite.actualiser_diversite(fractales_t)
