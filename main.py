@@ -28,6 +28,8 @@ IMAGE_HEIGHT_FINAL = 700
 # police d'ecriture
 FONT = "Comic Sans MS"
 
+#Enregistrer la meilleure sous format fond d'écran 1920x1080
+WALLPAPER=False
 
 
 # met à jour la note correspondant à la fractale dans le fichier notes.txt
@@ -52,7 +54,7 @@ def res_button(button_position):
 def refresh_page(fractales_t):
 	fractales_t.SetNoteFromFile()
 	#Un peu lent
-	fractales_t.EnregistrerMeilleure(wallpaper=True)
+	fractales_t.EnregistrerMeilleure(wallpaper=WALLPAPER)
 	fractales_t.AjoutMeilleureAuFichier()
 	fractales_t.NouvelleGeneration()
 	calcul_diversite.actualiser_diversite(fractales_t)

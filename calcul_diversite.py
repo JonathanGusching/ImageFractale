@@ -31,11 +31,9 @@ def actualiser_diversite(fractales):
 	plt.figure(1)
 	fichierNotes = open("notes.txt","r")
 	lignes = fichierNotes.readlines()
-	print("Pouet")
 	for i in range(8):
 		liste_fitness.append(int(lignes[i][0]))
 		liste_fitness_X.append(GENERATION)
-	print("Pouat")
 	liste_moyenne.append(sum(liste_fitness)/len(liste_fitness))
 	liste_moyenne_X.append(GENERATION)
 	plt.plot(liste_fitness_X, liste_fitness, "bo")

@@ -59,7 +59,6 @@ def BitWiseMutation(img,n):
 		index=rd.randint(24)
 		new_dna=dna[0:index-1]+str(invert(dna[index]))+dna[index+1:24] #Inversion : 0 devient 1 et 1 devient 0
 		i+=1
-	print(new_dna)
 	#On remet tout dans r,g,b:
 	r=int(new_dna[0:7],2)
 	g=int(new_dna[8:15],2)
